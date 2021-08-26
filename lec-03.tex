@@ -1,0 +1,524 @@
+\documentclass[a4paper]{article}
+\usepackage[english]{babel}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+% \usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{import}
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage{xcolor}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+\usepackage{thmtools}
+\usepackage{enumitem}
+\usepackage[framemethod=TikZ]{mdframed}
+
+\usepackage{xpatch}
+
+\usepackage{boites}
+\makeatletter
+\xpatchcmd{\endmdframed}
+{\aftergroup\endmdf@trivlist\color@endgroup}
+{\endmdf@trivlist\color@endgroup\@doendpe}
+{}{}
+\makeatother
+
+%\usepackage[poster]{tcolorbox}
+%\allowdisplaybreaks
+%\sloppy
+
+\usepackage[many]{tcolorbox}
+
+\xpatchcmd{\proof}{\itshape}{\bfseries\itshape}{}{}
+
+% to set box separation
+\setlength{\fboxsep}{0.8em}
+\def\breakboxskip{7pt}
+\def\breakboxparindent{0em}
+
+\newenvironment{proof}{\begin{breakbox}\textit{Proof.}}{\hfill$\square$\end{breakbox}}
+\newenvironment{ans}{\begin{breakbox}\textit{Answer.}}{\end{breakbox}}
+\newenvironment{soln}{\begin{breakbox}\textit{Solution.}}{\end{breakbox}}
+
+% \tcolorboxenvironment{proof}{
+%     blanker,
+%     before skip=\topsep,
+%     after skip=\topsep,
+%     borderline={0.4pt}{0.4pt}{black},
+%     breakable,
+%     left=12pt,
+%     right=12pt,
+%     top=12pt,
+%     bottom=12pt,
+% }
+%
+% \tcolorboxenvironment{ans}{
+%     blanker,
+%     before skip=\topsep,
+%     after skip=\topsep,
+%     borderline={0.4pt}{0.4pt}{black},
+%     breakable,
+%     left=12pt,
+%     right=12pt,
+% }
+
+\mdfdefinestyle{enclosed}{
+    linecolor=black
+    ,backgroundcolor=none
+    ,apptotikzsetting={\tikzset{mdfbackground/.append style={fill=gray!100,fill opacity=.3}}}
+    ,frametitlefont=\sffamily\bfseries\color{black}
+    ,splittopskip=.5cm
+    ,frametitlebelowskip=.0cm
+    ,topline=true
+    ,bottomline=true
+    ,rightline=true
+    ,leftline=true
+    ,leftmargin=0.01cm
+    ,linewidth=0.02cm
+    ,skipabove=0.01cm
+    ,innerbottommargin=0.1cm
+    ,skipbelow=0.1cm
+}
+
+\mdfsetup{%
+    middlelinecolor=black,
+    middlelinewidth=1pt,
+roundcorner=4pt}
+
+\setlength{\parindent}{0pt}
+
+\mdtheorem[style=enclosed]{theorem}{Theorem}
+\mdtheorem[style=enclosed]{lemma}{Lemma}[theorem]
+\mdtheorem[style=enclosed]{claim}{Claim}[theorem]
+\mdtheorem[style=enclosed]{ques}{Question}
+\mdtheorem[style=enclosed]{defn}{Definition}
+\mdtheorem[style=enclosed]{notn}{Notation}
+\mdtheorem[style=enclosed]{obs}{Observation}
+\mdtheorem[style=enclosed]{eg}{Example}
+\mdtheorem[style=enclosed]{cor}{Corollary}
+\mdtheorem[style=enclosed]{note}{Note}
+
+% \let\thetheorem=\relax
+% \let\thelemma=\relax
+% \let\theclaim=\relax
+% \let\theques=\relax
+% \let\thedefn=\relax
+% \let\thenotn=\relax
+% \let\theobs=\relax
+% \let\thecor=\relax
+% \let\thenote=\relax
+
+% \renewcommand\qedsymbol{$\blacksquare$}
+\newcommand{\nl}{\vspace{0.2cm}\\}
+\renewcommand{\sp}{\vspace{0.2cm}}
+\newcommand{\ol}{\overline}
+\newcommand{\mc}{\mathcal}
+\newcommand{\mi}{\mathit}
+\newcommand{\mf}{\mathbf}
+\newcommand{\mb}{\mathbb}
+\renewcommand{\L}{\mc{L}}
+\newcommand{\F}{\mathcal{F}}
+\renewcommand{\P}{\mathcal{P}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\changesto}{\vdash}
+\newcommand\Vtextvisiblespace[1][.3em]{%
+    \mbox{\kern.06em\vrule height.3ex}%
+    \vbox{\hrule width#1}%
+    \hbox{\vrule height.3ex}
+}
+\newcommand{\blank}{{\Vtextvisiblespace[0.7em]}}
+\newcommand{\leftend}{\triangleright}
+\newcommand{\comp}{\overline}
+
+
+\newcommand{\incfig}[1]{%
+    \def\svgwidth{\columnwidth}
+    \import{./figures/}{#1.pdf_tex}
+}
+\pdfsuppresswarningpagegroup=1
+
+\title{\textbf{Stochastic of Finance Lecture 1}}
+\date{}
+
+%\section{Recap}
+%
+%\section{Definitions}
+%
+%\begin{defn}
+%\end{defn}
+%
+%\section{Content}
+%
+%\begin{theorem}
+%\end{theorem}
+%\begin{proof}
+%\end{proof}
+%
+%\begin{ques}
+%\end{ques}
+%
+%\begin{eg}
+%\end{eg}
+%
+%\begin{claim}
+%\end{claim}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Recap}
+\begin{defn}
+    \textbf{Axiomatic definition of probability spaces}\nl
+    Let $\Omega$ be the set of all possible outcomes of a random experiment. Let $\F \subseteq 2^\Omega$ be a $\sigma$-algebra on $\Omega$, i.e., the following hold:
+
+    \begin{enumerate}
+        \item $\Omega \in \F$.
+        \item $A \in \F \implies \Omega \setminus A \in \F$.
+        \item $\F$ is closed under countable union, that is, if $A_i \in \F$ for $i = 1, 2, \ldots$, then $\cup_{i=1}^\infty A_i \in \F$.
+    \end{enumerate}
+
+    Let $P$ be a function (measure) $P : \F \to [0, 1]$ such that the following hold:
+
+    \begin{enumerate}
+        \item $P(A) \ge 0$ (trivially holds due to range).
+        \item $P$ is $\sigma$-additive, i.e., if $\{A_i\}_{i=1}^\infty \subseteq \F$ is a countable collection of disjoint subsets, then we have $P(\cup_{i=1}^\infty A_i) = \sum_{i=1}^\infty P(A_i)$.
+        \item $P(\Omega) = 1$.
+    \end{enumerate}
+
+    Then $(\Omega, F, P)$ is a probability space.
+\end{defn}
+\sp
+The classical probability comes from the formal definition when $\Omega$ is finite, $|\Omega| = n$, $P(\{\omega\}) = \frac{1}{n}$ where $\omega \in \Omega$, $\F$ is the power set of $\Omega$,
+which also turns out to be a $\sigma$-field on $\Omega$.\nl
+
+\begin{defn}
+    \textbf{Random variables}:\nl
+    Given a probability space $(\Omega, \F, P)$, if $X : \Omega \to \R$ is a function such that $X^{-1}((-\infty, x]) \in \F$ $\forall x \in \R$, then $X$ is a random variable, or a
+    measurable function w.r.t. $\F$.
+\end{defn}
+
+\begin{eg}
+    If $F$ is the largest $\sigma$-field (power set but maybe for infinite sets), then any real-function is a random variable.
+\end{eg}
+\begin{eg}
+    A constant function is always a random variable.
+\end{eg}
+\sp
+\begin{defn}
+    \textbf{Stochastic processes}:\nl
+    A stochastic process $\{X(t), t \in T\}$ is a collection of random variables defined on the probability space $(\Omega, \F, P)$.
+\end{defn}
+\sp
+\begin{eg}
+    \textbf{Examples of real-life stochastic processes}:
+    \begin{enumerate}
+    \item Price of some stock at the end of the day.
+    \item Number of trades made every second.
+    \item Market index at time $t$.
+    \item Number of companies registered in stock market at the end of the week.
+    \item Variance in a stock price in a day - measure on the random variables (since computed from the data). Usually we call observed information (and not computed information) a random
+        variable. Note also time series. Nothing wrong with calling this a random variable, but this won't be the focus of the course.
+    \end{enumerate}
+\end{eg}
+\sp
+Some stochastic processes have some important properties, as follows:
+\begin{enumerate}
+    \item Independence (mutual, not pairwise) - can verify such assumptions.
+    \item Stationary - many times we can assume that data is stationary. Two types:
+        \begin{enumerate}
+            \item Wide sense
+            \item Strict sense (by default)
+        \end{enumerate}
+    \item Memoryless property.
+    \item Martingale property - also useful with conditional expectations.
+\end{enumerate}
+For more, revisit MTL106.
+Time homogeneous is similar to stationary.
+\sp
+\begin{eg}
+    \textbf{Poisson process}\nl
+    $\{N(t), t \ge 0\}$ - number of events occuring upto and including time $t$. Suppose $N(t) \sim \P(\lambda t)$ where $\P$ is the Poisson distribution, and $\lambda$ is a fixed
+    parameter. This stochastic process is called a Poisson process. Some properties:
+    \begin{enumerate}
+        \item Increments are independent.
+        \item Increments are stationary.
+        \item Satisfies the memoryless property.
+        \item Doesn't satisfy the martingale property.
+    \end{enumerate}
+    We can derive a random variable that satisfies the martingale property from any random variable.
+\end{eg}
+\sp
+\begin{eg}
+    \textbf{Brownian motion/Wiener process}\nl
+    Let $\{W(t), t \ge 0\}$ be a stochastic process which satisfies the following conditions:
+    \begin{enumerate}
+        \item $W(0) = 0$
+        \item For fixed $t$, $W(t) \sim \N(0, t)$
+        \item Increments are independent.
+        \item Increments are stationary.
+    \end{enumerate}
+\end{eg}
+
+
+%\subsection{TODO}
+% Martingale property, filtration, zero sum games, Markov property, $r^{\mathrm{th}}$ order dependent process, autoregressive process - make notes later on
+
+\begin{defn}
+    \textbf{Filtration:}
+    Let $(\Omega, \F, P)$ be a probability space. A family $\{\F_t \mid t \ge 0\}$ of sub $\sigma$-fields of $\F$ is called a filtration if $\F_s \subset \F_t$ if $s \le t$.
+\end{defn}
+\sp
+HW: create some examples of filtrations.\nl
+\begin{defn}
+    If $\Omega$ is a space of functions on $T \subset \R^+$, then it comes with a natural filtration $\F_t = \sigma \{x(s), s \le t\}$ where $x$ is a stochastic process. That is, consider the
+    set of all possible values of $x(s)$ where $s \le t$, and generate a $\sigma$-field out of it.
+
+\end{defn}
+
+\begin{defn}
+    Given a probability space $(\Omega, \F, P)$ and a filtration $\F_t \subset F$, a family $\{M(t), t \ge 0\}$ (this is a stochastic process) is called a martingale wrt $(\Omega, \F_t, P)$ if
+    \begin{enumerate}
+        \item For almost all $w \in \Omega$, we have $M(t, w)$ has left and right limits at every $t$ and is continuous from the right.
+        \item For each $t \ge 0$, $M(t)$ (random variable) is a measurable function wrt $\F_t$ and integrable.
+        \item For $0 \le s \le t$, $\E[M(t) \mid \F_s] = M(s)$ almost everywhere/surely.
+    \end{enumerate}
+\end{defn}
+
+\begin{eg}
+    Example for filtration:\nl
+    The random experiment is tossing an unbiased coin infinitely many times.\nl
+    We have $\Omega = \{HHH\ldots, HTH\ldots, \ldots\}$.\nl
+    Let $A_H$ be the collection of samples starting with $H$ in the first toss.\nl
+    Let $A_T$ be the collection of samples starting with $T$ in the second toss.\nl
+    Let $A_{HH}$ be the collection of samples starting with $H$ in the first toss and $H$ in the second toss.\nl
+    Let $A_{HT}$ be the collection of samples starting with $H$ in the first toss and $T$ in the second toss.\nl
+    Consider the trivial $\sigma$-field $\F_0 = \{\emptyset, \Omega\}$.\nl
+    Using the first toss, we construct the $\sigma$-field $\F_1 = \{\emptyset, A_H, A_T, \Omega\}$.\nl
+    Using the second toss, we construct the $\sigma$-field $\F_2 = \{\emptyset, A_{HH}, A_{HT}, A_{TH}, A_{TT}, A_{HH} \cup A_{HT}, \ldots, A_{HH}^c, \ldots, \Omega\}$.\nl
+    Note that $\F_0 \subset \F_1 \subset \F_2 \subset \cdots$. Also note that $\lim_{n \to \infty} \F_n = \F_\infty = \F$.
+\end{eg}
+
+\begin{eg}
+    Non-example for martingale:\nl
+    Let $\{N(t), t \ge 0\}$ be a Poisson process on $(\Omega, \F, P)$.\nl
+    Now that the parameter space is contained in $\R^+$, we have a natural filtration $\F_t = \sigma \{N(s), s \le t\}$.\nl
+    Note the following properties:
+    \begin{enumerate}
+        \item $N(t, w)$ is right continuous at $t$ for $w \in \Omega$.
+        \item $N(t)$ is a measurable function wrt $\F_t$ and integrable.
+        \item $\E[N(t) \mid \F_s] = \E[N(t) - N(s) + N(s) \mid \F_s] = N(s) + \lambda(t - s)$.
+    \end{enumerate}
+    Therefore this is not a martingale wrt the given filtration.
+\end{eg}
+
+\begin{eg}
+    $\{W(t), t \ge 0\}$ on $(\Omega, \F, P)$ with the natural filtration. The first two conditions hold as usual. The third condition:\nl
+    $\E[W(t) \mid \F_s] = \E[W(t) - W(s) + W(s) \mid \F_s] = \E[W(t) - W(s)] + \E[W(s) \mid \F_s] = 0 + \E[W(s)]$ since $W(t) \sim \N(0, t)$ and $\E[W(s) \mid \F_s] = \E[W(s)]$.\nl
+    Hence brownian motion is a martingale wrt the natural filtration $\{\F(t), t \ge 0\}$.
+\end{eg}
+
+\begin{defn}
+    \textbf{Sub-martingale:} If $\E[X(t) \mid \F(s)] \ge X(s)$ a.e., then it is called a sub-martingale.
+\end{defn}
+
+\begin{defn}
+    \textbf{Super-martingale:} If $\E[X(t) \mid \F(s)] \le X(s)$ a.e., then it is called a super-martingale.
+\end{defn}
+
+Poisson process is a sub-martingale.\nl
+
+\begin{eg}
+    Let $\{X_n \mid n = 0, 1, 2, \ldots\}$, where $X_n =$ the amount at the end of the $n^\mathrm{th}$ game. $Y_i$ is the payoff of the $i^\mathrm{th}$ game, where $P[Y_i = 1] = P[Y_i = -1] =
+    \frac12$. Suppose $X_0 = A$.\nl
+    We have $\E[X_{n+1} \mid \F_n] = \E[X_n + Y_{n+1} \mid \F_n] = \E[X_n \mid \F_n] + \E[Y_{n+1} \mid \F_n] = \E[X_n] + \E[Y_{n+1}] = \E[X_n]$. So this stochastic process is a martingale. Also note that $\E[X_n] = \E[X_0 + Y_1 + \cdots +
+    Y_n] = A + 0 + \cdots + 0 = A$.
+\end{eg}
+
+\begin{defn}
+    \textbf{Markov Property}\nl
+    Let $\{X(t) \mid t \ge 0\}$ be a stochastic process defined on $(\Omega, \F, P)$. If for $0 \le s \le t$, $P(X(t) \mid X(u), 0 \le u \le s) = P(X(t) \mid X(s))$, then this stochastic process
+    is a Markov process, and is said to have the Markov property.
+\end{defn}
+
+The same can be done for discrete processes.\nl
+For instance, verify that $P(X_{n+1} = x_{n+1} \mid X_0 = A, X_1 = x_1, \ldots, X_n = x_n) = P(X_{n+1} = x_{n+1} \mid X_n = x_n)$, which gives us that the random walk is also a Markov process.\nl
+
+\begin{eg}
+    Consider the Poisson process $\{N(t) \mid t \ge 0\}$. Then we have $P(N(t) = k \mid N(u), 0 \le u \le s) = P(N(t) = k \mid N(s))$ due to independent increments, so this is a Markov process.
+\end{eg}
+
+Any process with independent increments is a Markov process.\nl
+A Markov process is a 1st order dependent process.\nl
+More generally, an auto-regressive process $AR(r)$ is a process where $X_n$ depends on $X_{n-1}, \ldots, X_{n-r}$.\nl
+
+\begin{eg}
+    Consider Brownian motion $\{W(t) \mid t \ge 0\}$. This has independent increments, so this is a Markov process.
+\end{eg}
+
+More properties: Nowhere differentiable property and so on.
+
+\section{Content}
+
+\subsection{Conditional expectation}
+
+Let $(\Omega, \F, P)$ be a probability space, and $X$ be an integrable random variable. Suppose $\gamma$ is a sub-$\sigma$-algebrao of $\F$. Then $\E[X \mid \gamma]$ is a $\gamma$-measurable random
+variable such that $\int_A X dP = \int_A E[X \mid \gamma] dP$ for all $A$.\nl
+
+\begin{theorem}
+    Let $X$ be an integrable random variable. Then for each $\sigma$-algebra $\gamma \subset \F$, the conditional expectation $\E[X \mid \gamma]$ exists and is unique upto $\gamma$-measurable sets
+    of probability $0$.
+\end{theorem}
+
+\textbf{Properties of conditional expectation}\nl
+\begin{enumerate}
+    \item $\E[X \mid \gamma] = X$ almost surely when $X$ is $\gamma$-measurable.
+    \item Linear combinations work
+    \item If $X$ is $\gamma$ measurable and $XY$ is integrable, then $\E[XY \mid \gamma] = X \E[Y \mid \gamma]$ a.s.
+    \item Tower property: $W \subset \gamma \subset \F$. Then $\E[X \mid W] = \E[\E[X \mid W] \mid \gamma] = \E[\E[X \mid \gamma] \mid W]$
+    \item $X \le Y$ a.s. implies $\E[X \mid \gamma] \le \E[Y \mid \gamma]$.
+\end{enumerate}
+
+\begin{lemma}
+    (Conditional Jensen's inequality)\nl
+    $\Phi : \R \to \R$, convex such that $\E[|\Phi(X)|] < +\infty$ satisfies $\Phi(\E[X \mid \gamma]) \le \E[\Phi(X) \mid \gamma]$.
+\end{lemma}
+
+\subsection{Brownian Motion}
+$\{B(t) : t \ge 0\}$ is called Brownian motion if
+\begin{enumerate}
+    \item $B(0) = 0$ a.s.
+    \item Independent increments: $0 < t_1 < \cdots < t_n$. Then $B(t_1), B(t_2) - B(t_1), \cdots, B(t_n) - B(t_{n-1})$ are independent.
+    \item $B(t) - B(s) \sim N(0, t - s)$ for all $t \ge s \ge 0$.
+    \item Sample paths are continuous with probability $1$.
+\end{enumerate}
+
+That is, we have:
+
+$$P(a \le B(t) \le b) = \frac{1}{\sqrt{2 \pi t}} \int_a^b \exp(-\frac{x^2}{2t}) dx$$
+
+Now we have $P(a_1 \le B(t_1) \le b_1, ..., a_n \le B(t_n) \le b_n)$ equals
+$$
+\int_{a_1}^{b_1} \cdots \int_{a_n}^{b_n} g(x_1, t_1 \mid 0) \cdot g(x_2, t_2 - t_1 \mid x_1) \cdots g(x_n, t_n - t_{n-1} \mid x_n) dx_{n} \cdots dx_1$$
+
+where $g(x, t \mid y) = \frac{1}{\sqrt{2 \pi t}} \exp(-\frac{(x-y)^2}{2t})$.\nl
+
+$B(t)$ is a martingale with respect to its natural filtration $\F_t = \sigma(B(s) \mid 0 \le s \le t)$.\nl
+
+\begin{theorem}
+    Let $B(t)$ be a Brownian motion. Then the processes
+    \begin{enumerate}
+        \item $X(t) = B^2(t) - t$.
+        \item $M(t) = \exp\{\sigma B(t) - \frac{1}{2} \sigma^2 t\}$, $\sigma \in \R^+$
+    \end{enumerate}
+    are both martingales wrt to its natural filtration.
+\end{theorem}
+
+\begin{proof}
+    We prove for the second martingale, which is also called the exponential martingale.\nl
+    $\E[\exp(\sigma B(t))] = \exp(\frac{1}{2}\sigma^2 t)$ using standard computation. So we have $\E[\exp(\sigma B(t) - \frac{1}{2}\sigma^2 t)] = 1$, hence it is integrable.\nl
+    We know that $B(t) - B(s) \sim N(0, t - s)$ for $t \ge s \ge 0$.\nl
+    We can show that
+    $\E[\exp(\sigma (B(t) - B(s)))] = \exp(\frac{1}{2}\sigma^2(t-s))$.\nl
+    So we can show that $\E[M(t) \mid \F_s] = \E[\exp(\sigma(B(t) - B(t)))\exp(\sigma B(s) - \frac{1}{2}\sigma^2 t) \mid \F_s] = \exp(\sigma B(s) - \frac{1}{2}\sigma^2 t) \cdot
+    \E[\exp(\sigma(B(t) - B(s))) \mid \F_s] = \exp(\sigma B(s) - \frac{1}{2} \sigma^2 t) \cdot \E[\exp(\sigma(B(t) - B(s)))] = \exp(\sigma B(s) - \frac{1}{2} \sigma^2 t) \cdot \exp(\frac{1}{2}
+    \sigma^2 (t - s)^2) = M(s)$, a.s.\nl
+    Hence $M(t)$ is a martingale.
+\end{proof}
+
+\begin{lemma}
+    Let $B(\cdot)$ be a one-dimensional Brownian motion. Then $\E[B(t) B(s)] = \min{t, s}$, with $t, s \ge 0$. (Covariance).
+\end{lemma}
+\nl
+How to define other brownian motions in terms of a brownian motion?\nl
+
+\begin{eg}
+    Let $B(t)$ be a Brownian motion. Define a stochastic process:
+    $X(t) = 0$ if $t = 0$, $t \cdot B(1/t)$ if $t > 0$.\nl
+    Then we claim that $X(t)$ is a standard Brownian motion.
+\end{eg}
+\begin{proof}
+    Suppose $t > s$. Then we have $X(t) - X(s) = (t - s)B(1/t) + s(B(1/t) - B(1/s))$. Note that the second part is $\sim N(0, s^2 \cdot \left(1/s - 1/t\right))$, and the first term is normally
+    distributed with distribution $N(0, \frac{(t - s)^2}{t})$. Moreover, these are independent, so their sum has variance added, i.e., it is normally distributed with distribution $N(0, s^2(1/s - 1/t)
+    + (t-s)^2/t) = N(0, t - s)$.\nl
+    Now we only need to show that increments are independent.\nl
+    $Cov(X(t), X(s)) = \E[X(t)X(s)] = stE[B(1/t)B(1/s)] = st \min(1/s, 1/t) = \min(s, t)$.\nl
+    Let $s < t$, then $Cov(X(s), X(t) - X(s)) = Cov(X(s), X(t)) - Cov(X(s), X(s)) = \min(s, t) - s = 0$. Then these are independent (since normally distributed - check).\nl
+    Now we need to check that they are continuous with probability 1. At $t = 0$, we have $\lim_{t \to 0} X(t) = \lim_{t \to 0} t B(\frac{1}{t}) = \lim_{n \to \infty} \frac{B(n)}{n} = \lim_{n
+    \to \infty} \frac{1}{n} \cdot \sum_{i=1}^n B(i) - B(i - 1)$.\nl Let $Y(i) = B(i) - B(i - 1)$. All these are i.i.d.
+    By SLLN (strong law of large numbers), we have that $\lim_{n \to \infty} \frac{1}{n} \sum_{i = 1}^n Y_i = 0$ a.s., so we are done.
+\end{proof}
+
+\subsubsection{First and quadratic variation}
+Let $f : [0, T] \to \R$. $\Pi = \{0 = t_0 < t_1 < \cdots < t_n = T\}$.\nl
+\begin{defn}
+    First variation of $f$ upto time $T$ is defined as 
+    $FV_T(f) = \lim_{||\Pi|| \to 0} \sum_{j = 0}^{n - 1} |f(t_{j+1}) - f(t_j)|$.
+\end{defn}
+\begin{defn}
+    The quadratic variation of $f$ upto time $T$ is defined by
+    $[f, f](T) = \lim_{||\Pi|| \to 0} \sum_{j = 0}^{n - 1} (f(t_{j+1}) - f(t_j))^2$.
+\end{defn}
+\begin{note}
+    If $f : [0, T] \to \R$ such that $|f'|$ is Riemann integrable on $[0, T]$, then $FV_T(f) = \int_0^T |f'(t)| dt$. For a proof, using mean value theorem, we have $f(t_{j+1}) - f(t_j) =
+    f'(t_j^*)(t_{j+1} - t_j)$ for some $t_j^* in [t_j, t_{j+1}]$.\nl
+    So we have $\sum_{j = 0}^{n - 1} |f(t_{j+1}) - f(t_j)| = \sum_{j = 0}^{n - 1} |f'(t_j^*)| (t_{j+1} - t_j)$, and hence\nl
+    $FV_T(f) = \lim_{||\Pi|| \to 0} \sum_{j=0}^{n-1} |f'(t_j^*)| (t_{j+1} - t_j)$, which is the Riemann integral of $|f'|$ on $[0, T]$.
+\end{note}
+\begin{note}
+    If $f$ has continuous derivative, then $[f, f](T) = 0$.
+\end{note}
+
+\begin{theorem}
+    If $B(t)$ is a one dimensional Brownian motion, then $[B, B](T) = T$ for all $T \ge 0$ a.s.
+\end{theorem}
+\begin{proof}
+    Let $\Pi = \{0 = t_0 < t_1 < \cdots < t_n = T\}$ be a partition of $[0, T]$. Then we have $Q_T^n = \sum_{j=0}^{n-1} (B(t_{j+1}) - B(t_j))^2$.\nl
+    We have $\E[(Q_T^n - T)^2] = \E[(\sum_{j=0}^{n-1} (B(t_{j+1}) - B(t_j))^2 - (t_{j+1} - t_j))^2] = \sum_{k=0}^{n-1} \sum_{j=0}^{n-1} \E[((B(t_{j+1}) - B(t_j))^2 - t_{j+1} + t_j) \cdot
+    (\text{same thing for k})]$. For $k \ne j$, we can show that the terms are 0 (using symmetry and the fact that $B(t)^2 - t$ is also a Brownian motion).\nl
+    This implies that $\E[(Q_T^n - T)^2] = \sum_{k = 0}^{n - 1} \E[(Y_k - 1)^2 (t_{k+1} - t_k)^2]$, where $Y_k = \frac{B(t_{k+1}) - B(t_k)}{\sqrt{t_{k+1} - t_k}} \sim N(0, 1)$.\nl
+    So $\exists c > 0$ such that $\E[(Q_T^n - T)^2] \le c \cdot \sum_{k = 0}^{n - 1} (t_{k+1} - t_k)^2$, whence the limit as $||\Pi|| \to 0$ of the expectation is 0. Thus $[B, B](T) = T$ for all
+    $T \ge 0$ a.s. (due to convergence in $L_2$).
+\end{proof}
+
+\begin{lemma}
+    For any $t > 0$, the first variation of Brownian motion $B(\cdot)$ upto time $T$ is infinite almost surely.
+\end{lemma}
+\begin{proof}
+    Consider the partition yet again. Look at the quadratic variation formula. We have $\sum_{j=0}^{n-1} (B(t_{j+1}) - B(t_j))^2 \le \sup_{0 \le k \le n - 1}|B(t_{k+1} - t_{k}
+)| \cdot \sum_{j=0}^{n-1} |B(t_{j+1}) - B(t_j)|$. Now since Brownian motion has a continuous sample path, the supremum is $0$. So the sample path has infinite variation with probability 1.
+Because suppose it is finite, then it gives the inequality $T \le 0$, which is a contradiction.
+\end{proof}
+
+\begin{defn}
+Geometric Brownian motion:
+$S(t) = S(0) \exp(\sigma B(t) + (\alpha - \frac{1}{2}\sigma^2) t)$ where $\alpha$ and $\sigma > 0$ are constants.
+\end{defn}
+This is used for stock pricing models.\nl
+Consider $0 \le T_1 < T_2$, and $T_1 \le t \le T_2$. Let $\Pi$ be a partition $\{T_1 = t_0 < t_1 < \cdots < t_n = T_2\}$.\nl
+Then we have $\log\left(\frac{S(t_{j+1})}{S(t_j)}\right) =
+\sigma (B(t_{j+1}) - B(t_j)) + (\alpha - \sigma^2/2) (t_{j+1} - t_j)$.\nl
+Summing this from $j = 0$ to $n - 1$ gives
+$\sum_{j=0}^{n-1} \log^2\left(\frac{S(t_{j+1})}{S(t_j)}\right) = \sum_{j=0}^{n-1}
+(\sigma (B(t_{j+1}) - B(t_j)) + (\alpha - \sigma^2/2) (t_{j+1} - t_j))^2 = A_1 + A_2 + A_3$, where $A_1$ is term corresponding to difference of $B$ squared, $A_2$ is the term corresponding to the
+other square and $A_3$ is the cross term. Then $\lim_{||\Pi|| \to 0} A_1 = \sigma^2(T_2 - T_1)$, that for $A_2$ is $0$. We need the following claim:
+\begin{claim}
+$\lim_{||\Pi|| \to 0} A_3 = 0$
+\end{claim}
+\begin{proof}
+    $|\sum_{j=0}^{n-1} (B() - B()) (() - ())| \le \sum_{j=0}^{n-1}|B() - B()||() - ()| \le max |B() - B()| \sum_{j=0}^{n-1}|() - ()| = 0 \cdot (T_2 - T_1)$. 
+\end{proof}
+
+So we have $\sigma^2 \approx \frac{1}{T_2 - T_1} \sum_{j=0}^{n-1} \left(\log \frac{S(t_{j+1})}{S(t_j)}\right)^2$ as an approximation to the volatility.\nl
+
+TODO: read up analysis again, L2 convergence and so on.
+
+\end{document}
